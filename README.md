@@ -20,7 +20,7 @@ conda install pandas
 
 akshare安装指导: [https://akshare.akfamily.xyz/installation.html](https://akshare.akfamily.xyz/installation.html "点击跳转")
 
-[github地址]('https://github.com/akfamily/akshare')
+github地址: [https://github.com/akfamily/akshare](https://github.com/akfamily/akshare "点击跳转")
 
 #### akshare 国内安装-Anaconda
 
