@@ -18,7 +18,7 @@ conda install pandas
 
 ### 开源财经接口 akshare
 
-[akshare安装指导]('https://akshare.akfamily.xyz/installation.html')
+akshare安装指导: [https://akshare.akfamily.xyz/installation.html](https://akshare.akfamily.xyz/installation.html "点击跳转")
 
 [github地址]('https://github.com/akfamily/akshare')
 
