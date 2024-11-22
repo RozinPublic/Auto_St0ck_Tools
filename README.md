@@ -26,14 +26,25 @@ bash ~/Anaconda3-2024.10-1-Linux-x86_64.sh
 source ~/.bashrc
 ```
 
+conda 命令
+
 ```conda
 conda -V
+```
+
+```conda
 conda env list
+```
+
+```conda
 conda create -n 环境名
+```
+
+```conda
 conda activate 环境名
 ```
 
-Anaconda官方文档: [https://docs.anaconda.com/anaconda/install/](https://docs.anaconda.com/anaconda/install/)
+Anaconda官方文档: [https://docs.anaconda.com/anaconda/install/](https://docs.anaconda.com/anaconda/install/ "点击跳转")
 
 ### 数据处理库 pandas
 
@@ -45,14 +56,12 @@ pandas==2.2.2
 conda install pandas
 ```
 
-### 开源财经接口 akshare
-
-akshare安装指导: [https://akshare.akfamily.xyz/installation.html](https://akshare.akfamily.xyz/installation.html "点击跳转")
-
-github地址: [https://github.com/akfamily/akshare](https://github.com/akfamily/akshare "点击跳转")
+### 开源财经接口 [akshare](https://github.com/akfamily/akshare "GitHub地址")
 
 #### akshare 国内安装-Anaconda
 
 ```akshare
 pip install akshare --upgrade --user -i https://pypi.tuna.tsinghua.edu.cn/simple
 ```
+
+akshare官方文档: [https://akshare.akfamily.xyz/installation.html](https://akshare.akfamily.xyz/installation.html "点击跳转")
