@@ -2,7 +2,7 @@
 
 ## env
 
-python==3.12.3
+python==3.12.7
 
 conda==24.1.2
 
