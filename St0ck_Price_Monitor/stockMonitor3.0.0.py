@@ -87,33 +87,35 @@ def compare_RTprices(monitor_stock_Info: MonitorStockInfo):
         compare_result = "Price is not expected"
     logging.info(f"___compare_RTprices__ >>> 比较结果: 股票代码: {monitor_stock_Info.stock_code}, 结果: {compare_result}")
 
-
-
 # 从json文件中读取需要监控的股票信息
 def read_stock_info_from_json(json_file_path):
     stock_info_list = []
-    with open(json_file_path, 'r', encoding='utf-8') as f:
-        data = json.load(f)
+    try:
+        with open(json_file_path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+            print(f">>>>>>>>>>>>>>>> ___read_stock_info_from_json___ >>>>>>>> 成功读取 JSON 文件: {json_file_path} ")
+            logging.info(f">>>>>>>>>>>>>>>> ___read_stock_info_from_json___ >>>>>>>> 成功读取 JSON 文件: {json_file_path} ")
 
-    stock_info_array = data.get('stock_info_monitor', [])
+        stock_info_array = data.get('stock_info_monitor', [])
 
-    for stock_data in stock_info_array:
-        stock_code = stock_data.get('stock_code')
-        stock_name = stock_data.get('stock_name')
-        target_price_buy = stock_data.get('target_price_buy')
-        target_price_sell = stock_data.get('target_price_sell')
-        current_price = None
-        message = None
+        for stock_data in stock_info_array:
+            stock_code = stock_data.get('stock_code')
+            stock_name = stock_data.get('stock_name')
+            target_price_buy = stock_data.get('target_price_buy')
+            target_price_sell = stock_data.get('target_price_sell')
+            current_price = None
+            message = None
 
-        # 检查前必填字段是否都不为空
-        if stock_code and target_price_buy and target_price_sell:
-            stock_info = MonitorStockInfo(stock_code, stock_name, target_price_buy, target_price_sell, current_price, message)
-            stock_info_list.append(stock_info)
-        else:
-            # print(f"请检查 {json_file_path} 文件")
-            logging.error(f"___read_stock_info_from_json___ >>> 请检查 {json_file_path} 文件")
-            exit()
-
+            # 检查前必填字段是否都不为空
+            if stock_code and target_price_buy and target_price_sell:
+                stock_info = MonitorStockInfo(stock_code, stock_name, target_price_buy, target_price_sell, current_price, message)
+                stock_info_list.append(stock_info)
+            else:
+                print(f">>>>>>>>>>>>>>>> ___read_stock_info_from_json___ >>> 请检查 {json_file_path} 文件内容是否规范 ")
+                logging.error(f">>>>>>>>>>>>>>>> ___read_stock_info_from_json___ >>> 请检查 {json_file_path} 文件内容是否规范 ")
+                exit()
+    except Exception as e:
+        logging.error(f"___read_stock_info_from_json___ >>> 读取 JSON 文件时出错: {e}")
     return stock_info_list
 
 
@@ -175,10 +177,11 @@ def run_loop(info, sleep):
     result = check_trading_time()
     # result = True
     if not result:
-        print(f"__run_loop__ Time: {datetime.now().strftime('%Y-m-d %H:%M:%S')} 不在交易时间!")
-        # logging.info(f"___run_loop__ >>> Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} 不在交易时间!")
+        print(f">>>>>>>> __run_loop__ >>>>>>>> Time: {datetime.now().strftime('%Y-m-d %H:%M:%S')} 不在交易时间! >>>>>>>>>>>>>>>>")
+        logging.info(f">>>>>>>> ___run_loop__ >>>>>>>> Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} 不在交易时间! >>>>>>>>>>>>>>>>")
 
     else:
+        print(f">>>>>>>> __run_loop__ >>>>>>>> Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} >>>>>>>>>>>>>>>>")
         logging.info(f">>>>>>>> __run_loop__ >>>>>>>> Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} >>>>>>>>>>>>>>>>")
         for stock_info in info:
             current_price = get_RTprices(stock_info)
@@ -191,9 +194,14 @@ def run_loop(info, sleep):
 
 
 def main():
-    # 读取配置文件
     config = configparser.ConfigParser()
-    config.read('config.ini', encoding='utf-8')
+    try:
+        config.read('config.ini', encoding='utf-8')
+        print(">>>>>>>>>>>>>>>> ___main___ >>>>>>>>>>>>>>>> 成功读取配置文件 'config.ini' >>>>>>>>>>>>>>>>")
+        logging.info(">>>>>>>>>>>>>>>> ___main___ >>>>>>>>>>>>>>>> 成功读取配置文件 'config.ini' >>>>>>>>>>>>>>>>")
+    except Exception as e:
+        print(f">>>>>>>>>>>>>>>> ___main___ >>>>>>>>>>>>>>>> 读取配置文件时出错: {e}")
+        logging.error(f">>>>>>>>>>>>>>>> ___main___ >>>>>>>>>>>>>>>> 读取配置文件时出错: {e}")
 
     # 读取需监控的股票信息
     stock_info_list = read_stock_info_from_json(config.get('system', 'stock_info_monitor_json_file_path'))
