@@ -172,8 +172,8 @@ def send_msg_mail_163_html(json_data):
 
 # 循环函数
 def run_loop(info, sleep):
-    # result = check_trading_time()
-    result = True
+    result = check_trading_time()
+    # result = True
     if not result:
         print(f"__run_loop__ Time: {datetime.now().strftime('%Y-m-d %H:%M:%S')} 不在交易时间!")
         # logging.info(f"___run_loop__ >>> Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} 不在交易时间!")
