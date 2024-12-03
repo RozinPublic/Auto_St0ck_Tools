@@ -1,0 +1,38 @@
+{
+    "__comment__" : [
+        {"需监控股票信息": "在数组 stock_info_monitor 中"},
+        {
+            "stock_code": "股票代码 不能为空", 
+            "stock_name": "股票简称",
+            "target_price_buy": "预期买入价格 不能为空",
+            "target_price_sell": "预期卖出价格 不能为空",
+            "current_price": "实时价格"
+        }
+    ],
+    "example": [
+        {
+            "stock_code": "000001",
+            "stock_name": "平安银行",
+            "target_price_buy": 12.0,
+            "target_price_sell": 15.0,
+            "current_price": null
+        },
+        {"=================================================================": "分割线"}
+    ],
+    "stock_info_monitor": [
+        {
+            "stock_code": "000001",
+            "stock_name": "平安银行",
+            "target_price_buy": 12.0,
+            "target_price_sell": 15.0,
+            "current_price": null
+        },
+        {
+            "stock_code": "600519",
+            "stock_name": "贵州茅台",
+            "target_price_buy": 1500.0,
+            "target_price_sell": 1800.0,
+            "current_price": null
+        }
+    ]
+}
