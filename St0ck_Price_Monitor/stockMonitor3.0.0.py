@@ -1,10 +1,10 @@
 import os
 import json
 import logging
+import platform
 import time
 from datetime import datetime
 import akshare as ak
-import pandas as pd
 import configparser
 import smtplib
 from email.mime.text import MIMEText
@@ -17,7 +17,19 @@ if not os.path.exists(log_dir):
 log_file = os.path.join(log_dir, f'stock_monitor_{datetime.now().strftime("%Y-%m-%d")}.log')  # 按日生成日志文件名
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(levelname)s - %(message)s',
-                    filename=log_file)
+                    filename=log_file,
+                    encoding='utf-8')
+
+def get_user_data_directory():
+    system = platform.system()
+    if system == "Windows":
+        return os.path.expanduser("~/AppData/Local/Auto_St0ck_Tools/St0ck_Price_Monitor/")
+    elif system == "Linux":
+        return os.path.expanduser("~/Auto_St0ck_Tools/St0ck_Price_Monitor/")
+    elif system == "Darwin":  # macOS
+        return os.path.expanduser("~/Library/Application Support/Auto_St0ck_Tools/St0ck_Price_Monitor/")
+    else:
+        raise OSError("Unsupported operating system")
 
 # 交易时间检查函数 返回布尔类型 true false
 def check_trading_time():
@@ -156,7 +168,8 @@ def send_msg_mail_163_html(json_data):
 
     # 读取配置文件获取发件人等信息
     config = configparser.ConfigParser()
-    config.read('config.ini', encoding='utf-8')
+    config_file_path = os.path.join(get_user_data_directory(), "config/config.ini")
+    config.read(config_file_path, encoding='utf-8')
     sender = config.get('email', 'sender')
     password = config.get('email', 'password')
     receiver = 'RozinPrivate@163.com'
@@ -174,8 +187,8 @@ def send_msg_mail_163_html(json_data):
 
 # 循环函数
 def run_loop(info, sleep):
-    result = check_trading_time()
-    # result = True
+    # result = check_trading_time()
+    result = True
     if not result:
         print(f">>>>>>>> __run_loop__ >>>>>>>> Time: {datetime.now().strftime('%Y-m-d %H:%M:%S')} 不在交易时间! >>>>>>>>>>>>>>>>")
         logging.info(f">>>>>>>> ___run_loop__ >>>>>>>> Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} 不在交易时间! >>>>>>>>>>>>>>>>")
@@ -195,16 +208,18 @@ def run_loop(info, sleep):
 
 def main():
     config = configparser.ConfigParser()
+    config_file_path = os.path.join(get_user_data_directory(), "config/config.ini")
     try:
-        config.read('config.ini', encoding='utf-8')
-        print(">>>>>>>>>>>>>>>> ___main___ >>>>>>>>>>>>>>>> 成功读取配置文件 'config.ini' >>>>>>>>>>>>>>>>")
-        logging.info(">>>>>>>>>>>>>>>> ___main___ >>>>>>>>>>>>>>>> 成功读取配置文件 'config.ini' >>>>>>>>>>>>>>>>")
+        config.read(config_file_path, encoding='utf-8')
+        print(f">>>>>>>>>>>>>>>> ___main___ >>>>>>>>>>>>>>>> 成功读取配置文件: {config_file_path} ")
+        logging.info(f">>>>>>>>>>>>>>>> ___main___ >>>>>>>>>>>>>>>> 成功读取配置文件: {config_file_path} ")
     except Exception as e:
         print(f">>>>>>>>>>>>>>>> ___main___ >>>>>>>>>>>>>>>> 读取配置文件时出错: {e}")
         logging.error(f">>>>>>>>>>>>>>>> ___main___ >>>>>>>>>>>>>>>> 读取配置文件时出错: {e}")
 
     # 读取需监控的股票信息
-    stock_info_list = read_stock_info_from_json(config.get('system', 'stock_info_monitor_json_file_path'))
+    json_file_path = os.path.join(get_user_data_directory(), config.get('system', 'stock_info_monitor_json_file_path'))
+    stock_info_list = read_stock_info_from_json(json_file_path)
 
     sleep_time = int(config.get('system', 'sleep_time'))
     while stock_info_list:
