@@ -1,5 +1,4 @@
-# 忽略所有配置文件 *.ini
-*.ini
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
